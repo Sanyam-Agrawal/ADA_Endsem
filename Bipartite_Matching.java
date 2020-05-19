@@ -118,29 +118,37 @@ class Bipartite_Matching
 		// s,t
 		final int s = 0, t = (n + 1) * (n + 1);
 
-		// no of elements in set A
-		int blacks = 0;
+		// no of elements in set A,B
+		int blacks = 0, whites = 0;
 
 		// E(G) : Contains <cap,flow>
 		List<Map<Integer,Edge>> edges = new ArrayList<>();
 		for(int i = 0; i < t + 1; ++i) edges.add(new HashMap<>());
 
 		// create edges bw the 2 sets
-		for(int i = 1; i <= n; ++i)
-			for(int j = 1; j <= n; ++j)
-				if(grid[i][j] == 1 && (i + j) % 2 == 0)
+		for(int i = 1; i <= n; ++i){
+			for(int j = 1; j <= n; ++j){
+				if(grid[i][j] == 0)
+					continue;
+
+				if((i + j) % 2 == 0)
 				{
 					++blacks;
 					for(int m = 0; m < 4; ++m)
 					{
 						int nx = i + dx[m], ny = j + dy[m];
 						if(1 <= nx && nx <= n && 1 <= ny && ny <= n
-							    && grid[nx][ny] == 1){
+						     && grid[nx][ny] == 1){
 							edges.get(id(i,j)).put(id(nx,ny), new Edge(10000000000L)); // original
 							edges.get(id(nx,ny)).put(id(i,j), new Edge(0)); // residual
 						}
 					}
 				}
+				else{
+					++whites;
+				}
+			}
+		}
 
 		for(int i = 1; i <= n; ++i)
 			for(int j = 1; j <= n; ++j){
@@ -162,7 +170,7 @@ class Bipartite_Matching
 			if(edges.get(i).containsKey(t))
 				flow_amt += edges.get(i).get(t).flow;
 
-		if(flow_amt != blacks){
+		if(flow_amt != blacks || flow_amt != whites){
 			out.write("0");
 			out.newLine();
 			out.close();
@@ -181,8 +189,8 @@ class Bipartite_Matching
 					{
 						int nx = i + dx[m], ny = j + dy[m];
 						if(1 <= nx && nx <= n && 1 <= ny && ny <= n
-							    && edges.get(id(i,j)).containsKey(id(nx,ny))
-							    && edges.get(id(i,j)).get(id(nx,ny)).flow == 1){
+						     && edges.get(id(i,j)).containsKey(id(nx,ny))
+						     && edges.get(id(i,j)).get(id(nx,ny)).flow == 1){
 							out.write("(" + i + "," + j + ")(" + nx + "," + ny + ")");
 							out.newLine();
 
