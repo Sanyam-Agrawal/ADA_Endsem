@@ -22,8 +22,10 @@ class Flow
 		edges = _edges;
 	}
 
-	public void run_algo(int s, int t){
+	public long run_algo(int s, int t){
 		int[] parent = new int[n];
+
+		long flow = 0;
 
 		while(true)
 		{
@@ -41,7 +43,7 @@ class Flow
 				for(Map.Entry<Integer,Edge> entry: edges.get(curr).entrySet()){
 					int ng = entry.getKey();
 					Edge e = entry.getValue();
-					if(parent[ng] != -1 || e.cap - e.flow == 0) continue;
+					if(parent[ng] != -1 || e.cap <= e.flow) continue;
 
 					// this node is valid to take
 					parent[ng] = curr;
@@ -63,7 +65,11 @@ class Flow
 				edges.get(ppar).get(par).flow += min_f;
 				edges.get(par).get(ppar).flow -= min_f;
 			}
+
+			flow += min_f;
 		}
+
+		return flow;
 	}
 }
 
@@ -163,12 +169,7 @@ class Bipartite_Matching
 			}
 
 		Flow flow = new Flow(t + 1, edges);
-		flow.run_algo(s,t);
-
-		long flow_amt = 0;
-		for(int i = 0; i < t + 1; ++i)
-			if(edges.get(i).containsKey(t))
-				flow_amt += edges.get(i).get(t).flow;
+		long flow_amt = flow.run_algo(s,t);
 
 		if(flow_amt != blacks || flow_amt != whites){
 			out.write("0");
