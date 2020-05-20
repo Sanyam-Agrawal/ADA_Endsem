@@ -90,7 +90,7 @@ class Bipartite_Matching {
 		BufferedReader in;
 		BufferedWriter out;
 		try {
-			in = new BufferedReader(new FileReader("input0.txt"));
+			in = new BufferedReader(new FileReader("input.txt"));
 			out = new BufferedWriter(new FileWriter("output.txt"));
 		} catch (Exception e) {
 			System.err.println("File Error!");
