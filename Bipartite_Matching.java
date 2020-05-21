@@ -26,18 +26,17 @@ class Flow {
 		long flow = 0;
 
 		while (true) {
-			//finding augmenting path via BFS
-
+			//finding augmenting path via DFS
 
 			for (int i = 0; i < n; ++i) parent[i] = -1;
 
-			Queue<Integer> q = new LinkedList<>();
+			Stack<Integer> q = new Stack<>();
 
 			parent[s] = 0;
-			q.add(s);
+			q.push(s);
 
 			while (q.size() > 0) {
-				int curr = q.remove();
+				int curr = q.pop();
 				if (curr == t) break;
 
 				for (Map.Entry<Integer, Edge> entry : edges.get(curr).entrySet()) {
@@ -47,7 +46,7 @@ class Flow {
 
 					// this node is valid to take
 					parent[ng] = curr;
-					q.add(ng);
+					q.push(ng);
 				}
 			}
 
@@ -81,7 +80,7 @@ class Bipartite_Matching {
 	private static int n;
 
 	private static int[] dx = { 0, -1, 1, 0};
-	private static int[] dy = { -1,  0, 0, 1};
+	private static int[] dy = {-1,  0, 0, 1};
 
 	// unique id for each tile
 	static int id(int x, int y) { return (x * n) + y - 1; }
