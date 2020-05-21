@@ -156,6 +156,17 @@ class Bipartite_Matching {
 				}
 			}
 		}
+
+		//if number of blacks is not equal to number of whites
+		//then we can't have a bijection from {black} to {white}
+		//so it's impossible for a perfect matching to exist
+		if (blacks != whites) {
+			out.write("0");
+			out.newLine();
+			out.close();
+			return;
+		}
+
 		for (int i = 1; i <= n; ++i)
 			for (int j = 1; j <= n; ++j) {
 				if ((i + j) % 2 == 0) {
